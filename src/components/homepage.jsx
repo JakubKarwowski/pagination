@@ -16,12 +16,14 @@ function Homepage() {
     const [itemValues, setItemValues] = useState([]);
 
     useEffect(()=>{
-        
         axios.get('https://reqres.in/api/products')
         .then((res)=> {
             setCollections(res.data.data);
-        }
-        )
+        }).catch(err => {
+          console.log(err);
+          window.alert(err)
+        })
+
         document.querySelector("input").type = "number";
         }, [])
 
@@ -67,11 +69,11 @@ function Homepage() {
     function handleOnClick (row){
       setModalTitle(`Full data of the item with ID: ${row.id}`)
       let item = collections.find(collection => collection.id === row.id)
-      // setItemProperties(item)
       setItemProperties(Object.getOwnPropertyNames(item))
       setItemValues(Object.values(item))
       handleOpen();
     }
+
     function createProperties () {
       if (itemProperties){
         return(
@@ -79,7 +81,6 @@ function Homepage() {
           {itemProperties.map((property, index) => (<p key={property}>{property} : {itemValues[index]}</p>))}
           </>
         )
-        
       }else return null
     }
 
@@ -114,7 +115,6 @@ function Homepage() {
           {createProperties()}
         </Box>
       </Modal>
-
     </>
     );
 
